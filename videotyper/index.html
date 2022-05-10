@@ -1,0 +1,141 @@
+<html>
+<style>
+	body{
+		margin: 0;
+		padding: 0;
+		overflow: auto;
+	}
+	#output{
+		display:flex;
+		flex-wrap: wrap;
+	}
+	/*p{
+		font-size: 10vw;
+		margin:0;
+		padding:0;
+	}*/
+	.videoContainer, .char{
+		width: 150px;
+	}
+	.videoContainer:hover{
+		width: 300px;
+	}
+	video{
+		width: 100%;
+	}
+	.video{
+		
+	}
+	#cursor {
+		margin-left: 3px;
+		width:1px;
+		height: 180px;
+		background-color: #000000;
+		animation: blinker 1s step-end infinite; 
+	}
+	@keyframes blinker {  50% { opacity: 0; }}
+</style>
+
+<body>
+	<div id='output'>
+		<div id='cursor'></div>
+	</div>
+<body>
+
+<script>
+var emp = '';
+var backslash = String.raw`\ ${emp}`;
+
+var doNotPrint = ['Backslash','Backspace','Escape','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19','Home','End','PageUp','PageDown','Clear','Delete','Tab','CapsLock', 'Enter','Shift','Control', 'Alt', 'Meta', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', ' ','`','1','2','3','4','5','6','7','8','9','0','-','=','~','!','@','#','$','%','^','&','*','(',')','_','+','[',']','{','}','|',,';',"'",':','"',',','.','/','<','>','?',backslash];
+var p;
+var keyPressed = {};
+var text = '';
+
+window.addEventListener('keydown', function(event) {
+	regularKeys();
+	specialKeys();
+}, true);
+
+
+// Regular Keys = Print All Keys Except Elements in doNotPrint Array
+function regularKeys(){
+	doNotPrint.includes(event.key) ? console.log('This key cannot be printed') : generate(event.key)
+}
+
+function generate(letter){
+	// create video container div
+	var videoCont = document.createElement('div');
+	videoCont.setAttribute('class', 'videoContainer char');
+	document.getElementById('output').insertBefore(videoCont,document.getElementById('cursor'));
+
+	var video = document.createElement('video');
+	// video.src = "A_test.mp4";
+	video.setAttribute('class', 'video')
+	video.src = "assets/A_test_vertical_1.mp4";
+	video.autoplay = true;
+	video.muted = false;
+	video.loop = true;
+	video.volume = 0.5;
+	video.addEventListener("mouseover", function( event ) {
+		var allVideo = document.querySelectorAll(".video");
+		for(var i=0; i<allVideo.length; i+=1){
+			allVideo[i].volume = 0;
+		}
+  		event.target.volume = 1;
+	}, false);
+	video.addEventListener("mouseleave", function( event ) {
+  		// highlight the mouseover target
+  		var allVideo = document.querySelectorAll(".video");
+		for(var i=0; i<allVideo.length; i+=1){
+			allVideo[i].volume = 0.5;
+		}
+  		event.target.volume = 0.5;
+	}, false);
+
+	var lastVideoCont = document.querySelectorAll(".videoContainer");
+	lastVideoCont[lastVideoCont.length-1].appendChild(video);
+}
+function hover(){
+
+}
+
+// Special Keys = SPACE, ENTER, DELETE, DELETE ALL(Cmnd+Backspace)
+function specialKeys(){
+
+	// SPACE(Spacebar ket)
+	if(event.code ==='Space'){
+		var videoCont = document.createElement('div');
+		videoCont.setAttribute('class', 'char');
+		document.getElementById('output').insertBefore(videoCont,document.getElementById('cursor'));
+	}
+
+	// LINE BREAK(Enter Key)
+	if(event.key === 'Enter'){
+		var lineBreak = document.createElement('div');
+		lineBreak.setAttribute('class', 'videoContainer')
+		lineBreak.setAttribute('style', 'flex-basis:100%;');
+		document.getElementById('output').insertBefore(lineBreak,document.getElementById('cursor'));
+	}
+
+	// DELETE ONE LETTER(Backspace Key)
+	if(event.key === 'Backspace'){
+		var lastLetter = document.getElementsByClassName('char')[document.getElementsByClassName('char').length - 1];
+		lastLetter === undefined ? console.log('nothing to delete') : lastLetter.remove(); 
+	}
+
+	// DELETE ALL TEXTS( Command Key(Meta2) + Backspace Key(Backspace0) )
+	keyPressed[event.key + event.location] = true;
+    if (keyPressed.Meta2 == true && keyPressed.Backspace0 == true) {
+    	document.querySelectorAll('.char').forEach(letters => { letters.remove(); } ) 
+    }
+
+    // Clear Any Two Keys Pressed(In this case Command Key + Backspace Key)
+	document.addEventListener('keyup', function(e) {
+		keyPressed[e.key + e.location] = false;
+		keyPressed = {};
+	}, false);
+
+}// The End of specialKeys()
+
+</script>
+</html>
