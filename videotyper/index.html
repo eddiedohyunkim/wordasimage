@@ -9,11 +9,6 @@
 		display:flex;
 		flex-wrap: wrap;
 	}
-	/*p{
-		font-size: 10vw;
-		margin:0;
-		padding:0;
-	}*/
 	.videoContainer, .char{
 		width: 150px;
 	}
@@ -71,7 +66,7 @@ function generate(letter){
 	var video = document.createElement('video');
 	// video.src = "A_test.mp4";
 	video.setAttribute('class', 'video')
-	video.src = "assets/A_test_vertical_1.mp4";
+	video.src = `assets/alphabet/${letter}.mp4`;
 	video.autoplay = true;
 	video.muted = false;
 	video.loop = true;
@@ -79,7 +74,7 @@ function generate(letter){
 	video.addEventListener("mouseover", function( event ) {
 		var allVideo = document.querySelectorAll(".video");
 		for(var i=0; i<allVideo.length; i+=1){
-			allVideo[i].volume = 0;
+			allVideo[i].volume = 0.1;
 		}
   		event.target.volume = 1;
 	}, false);
