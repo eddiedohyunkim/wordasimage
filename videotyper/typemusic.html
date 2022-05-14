@@ -9,202 +9,47 @@
 		display:flex;
 		flex-wrap: wrap;
 	}
-	.videoContainer, .char{
-		width: 180px;
-	}
-	.letterCont{
-		width: 180px;
-		display: grid;
-		grid-template-columns:repeat(1, 1fr);
-		grid-template-rows:repeat(1, 1fr);
-		/*overflow: auto;*/
-		/*border: 0.1px dotted #000000;*/
-		border-right: dotted 0.1px;
-  		border-bottom: dotted 0.1px;
-		box-sizing: content-box;
-	}
-	
+	#videoContainer{
+		margin: auto;
+		height: 100vh;
+	}	
 	video{
-		width: 100%;
+		height: 100%;
 	}
-	/*video:hover{
-		width: 200%;
-	}*/
-	#cursor {
-		margin-left: 3px;
-		width:1px;
-		height: 216px;
-		background-color: #000000;
-		animation: blinker 1s step-end infinite; 
-	}
-	@keyframes blinker {  50% { opacity: 0; }}
 </style>
 
 <body>
 	<div id='output'>
-		<div id='cursor'></div>
+		<div id='videoContainer'>
+			<video id= 'video'></video>
+		</div>
 	</div>
 <body>
 
 <script>
-var emp = '';
+// var emp = '';
 
 var doNotPrint = ['Backslash','Backspace','Escape','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19','Home','End','PageUp','PageDown','Clear','Delete','Tab','CapsLock', 'Enter','Shift','Control', 'Alt', 'Meta', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'ArrowRight', ' ','`','1','2','3','4','5','6','7','8','9','0','-','=','~','!','@','#','$','%','^','&','*','(',')','_','+','[',']','{','}','|',,';',"'",':','"',',','.','/','<','>','?'];
-var p;
-var keyPressed = {};
-var text = '';
 
 window.addEventListener('keydown', function(event) {
-	if (event.shiftKey && event.key ) {
-    event.preventDefault();
-  	}
 	regularKeys();
-	specialKeys();
 }, true);
 
 
-// Regular Keys = Print All Keys Except Elements in doNotPrint Array
 function regularKeys(){
 	doNotPrint.includes(event.key) ? console.log('This key cannot be printed') : generate(event.key)
 }
 
 function generate(letter){
-	// create video container div
-	scrollToBottom();
 
-	var check = document.getElementById(letter+'cont');
-	if(Boolean(check)){ 
+	var video = document.getElementById('video');
 
-	}else{
-		var letterCont = document.createElement('div');
-		letterCont.setAttribute('id', letter+'cont');
-		letterCont.setAttribute('class', 'letterCont');
-		document.getElementById('output').insertBefore(letterCont,document.getElementById('cursor'));
-	}	
-	
-
-	var videoCont = document.createElement('div');
-	videoCont.setAttribute('class', 'videoContainer char '+letter);
-	document.getElementById(letter+'cont').appendChild(videoCont);
-
-	var video = document.createElement('video');
-	// video.src = "A_test.mp4";
-	video.setAttribute('class', 'video')
-	video.src = `assets/alphabet/${letter}.mp4`;
+	video.src = `assets/alphabet_short/${letter}.mp4`;
 	video.autoplay = true;
 	video.muted = false;
 	video.loop = true;
-	video.volume = 0.5;
-	video.addEventListener("mouseover", function( event ) {
-		var allVideo = document.querySelectorAll(".video");
-		for(var i=0; i<allVideo.length; i+=1){
-			allVideo[i].volume = 0.1;
-		}
-  		event.target.volume = 1;
-	}, false);
-	video.addEventListener("mouseleave", function( event ) {
-  		// highlight the mouseover target
-  		var allVideo = document.querySelectorAll(".video");
-		for(var i=0; i<allVideo.length; i+=1){
-			allVideo[i].volume = 0.5;
-		}
-  		event.target.volume = 0.5;
-	}, false);
-
-	var lastVideoCont = document.getElementById(letter+'cont').querySelectorAll(".videoContainer");
-	lastVideoCont[lastVideoCont.length-1].appendChild(video);
-
-	var allLetter = document.querySelectorAll(`.${letter}`);
-		
-			if(1<allLetter.length && allLetter.length<5){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(2, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(2, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					
-					allLetter[i].style.width = 180/2;
-				}
-			}else if(4<allLetter.length && allLetter.length<10){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(3, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(3, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/3;
-				}
-			}else if(9<allLetter.length && allLetter.length<17){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(4, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(4, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/4;
-				}
-			}else if(16<allLetter.length && allLetter.length<26){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(5, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(5, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/5;
-				}
-			}else if(25<allLetter.length && allLetter.length<37){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(6, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(6, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/6;
-				}
-			}else if(36<allLetter.length && allLetter.length<50){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(7, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(7, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/7;
-				}
-			}else if(49<allLetter.length && allLetter.length<64){
-				document.getElementById(letter+'cont').style.gridTemplateColumns = 'repeat(8, 1fr)';
-				document.getElementById(letter+'cont').style.gridTemplateRows = 'repeat(8, 1fr)';
-				for(var i=0; i<allLetter.length; i+=1){
-					allLetter[i].style.width = 180/8;
-				}
-			}
+	video.volume = 1;
 			
-}
-
-// Special Keys = SPACE, ENTER, DELETE, DELETE ALL(Cmnd+Backspace)
-function specialKeys(){
-
-	// SPACE(Spacebar ket)
-	// if(event.code ==='Space'){
-	// 	var videoCont = document.createElement('div');
-	// 	videoCont.setAttribute('class', 'char');
-	// 	document.getElementById('output').insertBefore(videoCont,document.getElementById('cursor'));
-	// }
-
-	// LINE BREAK(Enter Key)
-	// if(event.key === 'Enter'){
-	// 	var lineBreak = document.createElement('div');
-	// 	lineBreak.setAttribute('class', 'videoContainer')
-	// 	lineBreak.setAttribute('style', 'flex-basis:100%;');
-	// 	document.getElementById('output').insertBefore(lineBreak,document.getElementById('cursor'));
-	// }
-	if(event.key === 'Shift'){
-		event.preventDefault()
-	}
-	// DELETE ONE LETTER(Backspace Key)
-	if(event.key === 'Backspace'){
-		var lastLetter = document.getElementsByClassName('letterCont')[document.getElementsByClassName('letterCont').length - 1];
-		lastLetter === undefined ? console.log('nothing to delete') : lastLetter.remove(); 
-	}
-
-	// DELETE ALL TEXTS( Command Key(Meta2) + Backspace Key(Backspace0) )
-	keyPressed[event.key + event.location] = true;
-    if (keyPressed.Meta2 == true && keyPressed.Backspace0 == true) {
-    	document.querySelectorAll('.letterCont').forEach(letters => { letters.remove(); } ) 
-    }
-
-    // Clear Any Two Keys Pressed(In this case Command Key + Backspace Key)
-	document.addEventListener('keyup', function(e) {
-		keyPressed[e.key + e.location] = false;
-		keyPressed = {};
-	}, false);
-
-}// The End of specialKeys()
-
-function scrollToBottom(){
-   document.body.scrollTop = document.body.scrollHeight;
 }
 </script>
 </html>
